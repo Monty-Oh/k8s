@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth-container
+          image: assn2/inmemory-auth:latest
+          ports:
+            - containerPort: 8082
+          livenessProbe:
+            httpGet:
+              path: /auth/monitor/healthcheck
+              port: 8082
+          env:
+            - name: PROFILE
+              value: develop
+
